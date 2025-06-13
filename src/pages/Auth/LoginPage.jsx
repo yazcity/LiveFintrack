@@ -1,5 +1,5 @@
 // src/pages/LoginPage.jsx
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../../components/LoginForm';
 
 const LoginPage = () => {
   return <LoginForm />;

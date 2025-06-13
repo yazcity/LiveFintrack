@@ -15,7 +15,9 @@ root.render(
 <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <App />
+       <BrowserRouter> {/* ✅ HERE is the only place it should be */}
+        <App />
+       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>
 );
