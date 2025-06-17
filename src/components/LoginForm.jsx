@@ -1,9 +1,34 @@
-// src/components/LoginForm.jsx
-import { useState } from 'react';
-import { TextField, Button, Box, Typography, Alert } from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import { Box, Button, Typography, TextField, Alert, Container, styled ,Paper} from '@mui/material';
+import CustomButton from '../components/CustomButton/CustomButton';
+import CustomSubmitButton from '../components/CustomButton/CustomSubmitButton';
 import { loginUser } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import WelcomeLayout from './Layout/WelcomeLayout';
+
+// Styled components defined outside to avoid re-creation on each render
+const CustomBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  gap: theme.spacing(5),
+  marginTop: theme.spacing(3),
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+  },
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "64px",
+  color: "#fff",
+  fontWeight: "bold",
+  margin: theme.spacing(4, 0),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "40px",
+  },
+}));
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -12,9 +37,10 @@ const LoginForm = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,42 +49,60 @@ const LoginForm = () => {
     try {
       const token = await loginUser(form);
       login(token);
-      navigate('/dashboard'); // or your default page
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      setError('Invalid credentials. Please try again.');
+      // If backend returns message, show it; else fallback message
+      const message = err?.response?.data?.message || 'Invalid credentials. Please try again.';
+      setError(message);
     }
   };
 
   return (
-    <Box maxWidth={400} mx="auto" mt={10} p={3} boxShadow={3}>
-      <Typography variant="h5" gutterBottom>Login</Typography>
-      {error && <Alert severity="error">{error}</Alert>}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          margin="normal"
-          required
-        />
-        <TextField
-          fullWidth
-          type="password"
-          label="Password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          margin="normal"
-          required
-        />
-        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-          Login
-        </Button>
-      </form>
-    </Box>
+<WelcomeLayout>
+           <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 4, mt: 6, borderRadius: 3 }}>
+        <Typography variant="h5" mb={2} align="center">
+        Login
+        </Typography>
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+
+            <form onSubmit={handleSubmit} noValidate>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                margin="normal"
+                required
+                autoComplete="email"
+                aria-label="email address"
+              />
+              <TextField
+                fullWidth
+                type="password"
+                label="Password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                margin="normal"
+                required
+                autoComplete="current-password"
+                aria-label="password"
+              />
+              <CustomSubmitButton
+                backgroundColor="#0F1B4C"
+                color="#fff"
+                buttonText="Login"
+                welcomeBtn={false}
+                 fullWidth={true} 
+              />
+            </form>
+</Paper>
+                </Container>
+</WelcomeLayout>
   );
 };
 

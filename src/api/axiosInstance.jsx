@@ -1,11 +1,12 @@
-// const API_BASE_URL = 'http://localhost:18749/api/AuthRegister';
-// const API_BASE_URL = 'https://livefintrackhub.onrender.com/api/AuthRegister';
+ //const API_BASE_URL = 'http://localhost:18749/api/AuthRegister';
+ //const API_BASE_URL = 'https://livefintrackhub.onrender.com/api/AuthRegister';
+
 
 // src/api/axiosInstance.js
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://livefintrackhub.onrender.com/api/',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:18749/api',
 });
 
 axiosInstance.interceptors.request.use(config => {
