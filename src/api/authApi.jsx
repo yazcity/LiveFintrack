@@ -16,7 +16,10 @@ import axiosInstance from './axiosInstance';
 
 export const loginUser = async (loginData) => {
   const response = await axiosInstance.post('/AuthRegister/login', loginData);
+
+  console.log(response.data.data,"yazz");
   return response.data.data; // because your API returns { data, message }
+
 };
 
 export const registerUser = async (registerData) => {

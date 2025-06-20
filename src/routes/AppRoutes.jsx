@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/Auth/LoginPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
@@ -9,6 +9,8 @@ import { Box } from '@mui/material';
 import AuthPage from '../pages/Auth/AuthPage';
 import LoginPage from '../pages/Auth/LoginPage';
 import WelcomeLayout from '../components/Layout/WelcomeLayout';
+
+
 
 export default function AppRoutes() {
   return (
