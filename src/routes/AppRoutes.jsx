@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/Auth/LoginPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import Dashboard1 from '../pages/Dashboard/Dasboard1';
+import Dashboard2 from '../pages/Dashboard/Dashboard2';
 import Register from '../pages/Auth/Register';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
@@ -9,6 +11,8 @@ import { Box } from '@mui/material';
 import AuthPage from '../pages/Auth/AuthPage';
 import LoginPage from '../pages/Auth/LoginPage';
 import WelcomeLayout from '../components/Layout/WelcomeLayout';
+import CategoryPage from '../pages/Template/CategoryPage';
+import AddCategoryWithDialog from '../pages/Template/AddCategoryWithDialog';
 
 
 
@@ -29,7 +33,10 @@ export default function AppRoutes() {
           <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard1 />} />
+              <Route path="/dashboard1" element={<Dashboard2 />} />
+              <Route path="/category" element={<CategoryPage/>} />
+             <Route path='dialog' element= {<AddCategoryWithDialog/>}/>
             <Route path="/" element={<Dashboard />} />
           </Route>
         </Routes>
