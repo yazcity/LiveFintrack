@@ -127,7 +127,7 @@ const Register = () => {
               <CustomSubmitButton
                 backgroundColor="#0F1B4C"
                 color="#fff"
-                buttonText="Login"
+                buttonText="Register"
                 welcomeBtn={false}
                  fullWidth={true} 
               />

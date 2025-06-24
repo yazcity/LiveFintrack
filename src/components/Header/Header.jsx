@@ -216,6 +216,13 @@ import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import HomeIcon from "@mui/icons-material/Contacts";
 import ContactsIcon from "@mui/icons-material/Contacts";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Tooltip } from '@mui/material';
+
+import { useMediaQuery } from '@mui/material';
 import {
   Drawer,
   List,
@@ -231,7 +238,7 @@ import { useAuth } from '../../context/AuthContext'; // import your auth hook
 function Header() {
   const [mobileMenu, setMobileMenu] = useState({ left: false });
   const navigate = useNavigate();
-
+  const isMobile = useMediaQuery('(max-width:600px)'); 
   // Get user and logout from your auth context
   const { user, logout } = useAuth();
 
@@ -490,21 +497,68 @@ const list = (anchor) => (
               {user.name || user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || "User"}
             </Typography> */}
            
-            <CustomButton  sx={{
+            {/* <CustomButton  sx={{
                 display: { xs: 'none', md: 'block' } // 👈 Hides on xs/sm, shows on md and up
             }}
               backgroundColor='#0F1B4C'
               color='#fff'
               buttonText="Logout"
               onClick={handleLogout}
-            />
+            /> */}
+
+             {/* Logout */}
+      {isMobile ? (
+        <Tooltip title="Logout">
+          <ExitToAppIcon
+            style={{ color: '#0F1B4C', fontSize: 30, cursor: 'pointer' }}
+            onClick={handleLogout}
+          />
+        </Tooltip>
+      ) : (
+        <CustomButton
+          backgroundColor="#0F1B4C"
+          color="#fff"
+          buttonText="Logout"
+          onClick={handleLogout}
+        />
+      )}
+      
           </>
         ) : (
           <>
+            {/* <NavBarLink  to="/login">
+              Sign In
+            </NavBarLink> */}
+
+             {/* Sign In */}
+      {isMobile ? (
+        <Tooltip title="Sign In">
+          <LockOpenIcon
+            style={{ color: '#0F1B4C', fontSize: 30, cursor: 'pointer', marginRight: 16 }}
+            onClick={() => navigate('/login')}
+          />
+        </Tooltip>
+      ) : (
             <NavBarLink  to="/login">
               Sign In
             </NavBarLink>
-            <CustomButton backgroundColor='#0F1B4C' color='#fff' buttonText="Register" onClick={() => navigate('/register')} />
+      )}
+
+             {isMobile ? (
+        <AppRegistrationIcon
+          style={{ color: '#0F1B4C', fontSize: 30, cursor: 'pointer' }}
+          onClick={() => navigate('/register')}
+        />
+      ) : (
+        <CustomButton
+          backgroundColor="#0F1B4C"
+          color="#fff"
+          buttonText="Register"
+          onClick={() => navigate('/register')}
+        />
+      )}
+
+            {/* <CustomButton backgroundColor='#0F1B4C' color='#fff' buttonText="Register" onClick={() => navigate('/register')} /> */}
           </>
         )}
       </Box>
