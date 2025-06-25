@@ -13,6 +13,8 @@ import LoginPage from '../pages/Auth/LoginPage';
 import WelcomeLayout from '../components/Layout/WelcomeLayout';
 import CategoryPage from '../pages/Template/CategoryPage';
 import AddCategoryWithDialog from '../pages/Template/AddCategoryWithDialog';
+import AccountGroupType from '../pages/AccountGroupType/AccountGroupType';
+import AccountGroup from '../pages/AccountGroup/AccountGroup';
 
 
 
@@ -37,6 +39,8 @@ export default function AppRoutes() {
               <Route path="/dashboard1" element={<Dashboard2 />} />
               <Route path="/category" element={<CategoryPage/>} />
              <Route path='dialog' element= {<AddCategoryWithDialog/>}/>
+              <Route path='account-group-types' element= {<AccountGroupType/>}/>
+              <Route path='account-groups' element= {<AccountGroup/>}/>
             <Route path="/" element={<Dashboard />} />
           </Route>
         </Routes>
