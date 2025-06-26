@@ -15,6 +15,8 @@ import CategoryPage from '../pages/Template/CategoryPage';
 import AddCategoryWithDialog from '../pages/Template/AddCategoryWithDialog';
 import AccountGroupType from '../pages/AccountGroupType/AccountGroupType';
 import AccountGroup from '../pages/AccountGroup/AccountGroup';
+import TransactionCategories from '../pages/TransactionCategories/TransactionCategories';
+import Account from '../pages/Account/Account';
 
 
 
@@ -38,9 +40,11 @@ export default function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard1 />} />
               <Route path="/dashboard1" element={<Dashboard2 />} />
               <Route path="/category" element={<CategoryPage/>} />
-             <Route path='dialog' element= {<AddCategoryWithDialog/>}/>
+              <Route path='dialog' element= {<AddCategoryWithDialog/>}/>
               <Route path='account-group-types' element= {<AccountGroupType/>}/>
+              <Route path='transaction-categories' element= {<TransactionCategories/>}/>
               <Route path='account-groups' element= {<AccountGroup/>}/>
+              <Route path='account' element= {<Account/>}/>
             <Route path="/" element={<Dashboard />} />
           </Route>
         </Routes>

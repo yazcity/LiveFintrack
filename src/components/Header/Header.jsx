@@ -62,6 +62,7 @@ const nav_titles = [
   { path: '/about', display: 'About Us' },
   { path: '/account-group-types', display: 'Account Group Types' },
   { path: '/account-groups', display: 'Account Groups' },
+  { path: '/transaction-categories', display: 'Transaction Categories' },
 ];
 
 function Header() {

@@ -173,7 +173,7 @@ export default function CategoryManager() {
             variant="contained"
             onClick={handleSave}
             disabled={
-              !formData.category.trim() || !formData.description.trim()
+              !formData.category.trim()
             }
           >
             Save
