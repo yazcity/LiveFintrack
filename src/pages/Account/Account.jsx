@@ -55,8 +55,8 @@ useEffect(() => {
 
 const handleEdit = async (id) => {
   const accountToEdit = account.find((a) => a.accountId === id);
+  console.log('Account to edit:', accountToEdit); // 👈 Confirm this logs correctly
 
-  console.log('Account to edit:', accountToEdit);
   if (accountToEdit) {
     setFormData({
       account: accountToEdit.accountName,
@@ -67,29 +67,44 @@ const handleEdit = async (id) => {
     });
 
     setEditId(id);
-    setSelectedGroupTypeId(accountToEdit.accountgroupTypeId || '');
 
-    // Fetch group based on group type
-      const group = await getAccountGroup(accountToEdit.accountgroupTypeId);
-      setAccountGroup(group || []);
+    const typeId = accountToEdit.accountgroupTypeId || ''; // 👈 Check this again
+    setSelectedGroupTypeId(typeId);
 
-     setSlectedAccountGroupId(accountToEdit.accountgroupId || '');
+    const group = await getAccountGroup(typeId);
+    setAccountGroup(group || []);
+
+    setSlectedAccountGroupId(accountToEdit.accountgroupId || '');
 
     handleOpen();
   }
 };
 
+
 const handleDelete = async (id) => {
 
 }
-  const handleClose = () => {setOpen(false);}
+  const handleClose = () => {
+    
+    setOpen(false);
+    setEditId(null);
+  
+  }
   const handleOpen = () => {
   // Reset dropdowns when adding new
-  if (!editId) {
-    setSelectedGroupTypeId('');
-    setAccountGroup([]);
-    setSlectedAccountGroupId('');
+  // if (!editId) {
+  //   setSelectedGroupTypeId('');
+  //   setAccountGroup([]);
+  //   setSlectedAccountGroupId('');
+  //   setFormData({ account: "", amount: 0.0 , description: "", notes: "", isIncludeInTotal: false });
+  // }
+  // setOpen(true);
+
+   if (!editId) {
     setFormData({ account: "", amount: 0.0 , description: "", notes: "", isIncludeInTotal: false });
+    setSelectedGroupTypeId('');
+    setSlectedAccountGroupId('');
+    setAccountGroup([]);
   }
   setOpen(true);
 };
@@ -198,11 +213,11 @@ else{
                   <TableCell align="center">
                       <IconButton
                            color="primary"
-                            onClick={() => handleEdit(cat.accountgroupId)}>
+                            onClick={() => handleEdit(cat.accountId)}>
                        <EditIcon />
                         </IconButton>
 
-                      <IconButton color="error" onClick={() => handleDelete(cat.accountgroupId)}>
+                      <IconButton color="error" onClick={() => handleDelete(cat.accountId)}>
                        <DeleteIcon />
                     </IconButton>
                       </TableCell>
