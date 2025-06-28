@@ -6,7 +6,9 @@ export const getAccountGroupTypes = async () => {
 };
 
 export const getAccountGroupTypeById = async (id) => {
+ 
   const response = await axiosInstance.get(`/AccountGroupType/${id}`);
+ 
   return response.data.data;
 };
 
