@@ -58,6 +58,8 @@ const CustomMenuIcon = styled(MenuIcon)(({ theme }) => ({
 const nav_titles = [
   { path: '/', display: 'Dashboard' },
   { path: '/account', display: 'Account' },
+  { path: '/income', display: 'Income' },
+  { path: '/expense', display: 'Expense' },
   { path: '/services', display: 'Services' },
   { path: '/about', display: 'About Us' },
   { path: '/account-group-types', display: 'Account Group Types' },

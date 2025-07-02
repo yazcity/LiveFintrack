@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getAccountGroupTypes, getAccountGroup } from '../../api/DropdownApi';
-import {saveAccount, getAccount} from '../../api/AccountApi';
+import {saveAccount, getAccount, deleteAccount} from '../../api/AccountApi';
 import { useLoading } from '../../components/LoadingContext/LoadingContext'; //'  ../components/LoadingContext/LoadingContext';
+// import { useWithLoader } from '../../components/LoadingContext/useWithLoader';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from "sweetalert2";
@@ -26,98 +27,127 @@ function Account() {
 
   const { showLoading, hideLoading } = useLoading();
 
+ // const { withLoader } = useWithLoader();
+
 useEffect(() => {
   fetchAccount();
   fetchGroupTypes();
 }, []);
 
-// useEffect(() => {
-//   const fetchAllData = async () => {
-//     try {
-//       showLoading();
-//       const [accounts, types] = await Promise.all([
-//         getAccount(),
-//         getAccountGroupTypes()
-//       ]);
-//       setAccount(accounts || []);
-//       setGroupTypes(types || []);
-//     } catch (err) {
-//       console.error('Failed to fetch data:', err);
-//       Swal.fire("Error", "Failed to load data.", "error");
-//     } finally {
-//       hideLoading();
-//     }
-//   };
 
-//   fetchAllData();
-// }, []);
-
-
-const handleEdit = async (id) => {
-  const accountToEdit = account.find((a) => a.accountId === id);
-  console.log('Account to edit:', accountToEdit); // 👈 Confirm this logs correctly
-
-  if (accountToEdit) {
-    setFormData({
-      account: accountToEdit.accountName,
-      amount: accountToEdit.amount,
-      description: accountToEdit.description || "",
-      notes: accountToEdit.note || "",
-      isIncludeInTotal: accountToEdit.isIncludeInTotal || false
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will delete the account permanently.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteAccount(id);
+          Swal.fire("Deleted!", "Account deleted successfully.", "success");
+          fetchAccount();
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", "Failed to delete account.", "error");
+        }
+      }
     });
-
-    setEditId(id);
-
-    const typeId = accountToEdit.accountgroupTypeId || ''; // 👈 Check this again
-    setSelectedGroupTypeId(typeId);
-
-    const group = await getAccountGroup(typeId);
-    setAccountGroup(group || []);
-
-    setSlectedAccountGroupId(accountToEdit.accountgroupId || '');
-
-    handleOpen();
-  }
-};
-
-
-const handleDelete = async (id) => {
-
-}
+  };
   const handleClose = () => {
     
     setOpen(false);
     setEditId(null);
   
   }
-  const handleOpen = () => {
-  // Reset dropdowns when adding new
-  // if (!editId) {
-  //   setSelectedGroupTypeId('');
-  //   setAccountGroup([]);
-  //   setSlectedAccountGroupId('');
-  //   setFormData({ account: "", amount: 0.0 , description: "", notes: "", isIncludeInTotal: false });
-  // }
-  // setOpen(true);
 
-   if (!editId) {
-    setFormData({ account: "", amount: 0.0 , description: "", notes: "", isIncludeInTotal: false });
+
+//   const handleEditOpen = async (accountToEdit) => {
+//   setFormData({
+//       account: accountToEdit.accountName,
+//       amount: accountToEdit.amount,
+//       description: accountToEdit.description || "",
+//       notes: accountToEdit.note || "",
+//       isIncludeInTotal: accountToEdit.isIncludeInTotal || false
+//     });
+//     setEditId(accountToEdit.accountId);
+
+//     const typeId = accountToEdit.accountgroupTypeId || ''; // 👈 Check this again
+//     setSelectedGroupTypeId(typeId);
+
+//     const group = await getAccountGroup(typeId);
+//     setAccountGroup(group || []);
+
+//     setSlectedAccountGroupId(accountToEdit.accountgroupId || '');
+
+//     setOpen(true);
+//   }
+
+
+//   const openDialog = (editData = null) => {
+//   if (editData) {
+//     setEditId(editData.accountId);
+//     setFormData({
+//       account: editData.accountName,
+//       amount: editData.amount,
+//       description: editData.description || "",
+//       notes: editData.note || "",
+//       isIncludeInTotal: editData.isIncludeInTotal || false
+//     });
+//     setSelectedGroupTypeId(editData.accountgroupTypeId || '');
+//     getAccountGroup(editData.accountgroupTypeId).then(group => {
+//       setAccountGroup(group || []);
+//       setSlectedAccountGroupId(editData.accountgroupId || '');
+//     });
+//   } else {
+//     setEditId(null);
+//     setFormData({ account: "", amount: 0.0, description: "", notes: "", isIncludeInTotal: false });
+//     setSelectedGroupTypeId('');
+//     setSlectedAccountGroupId('');
+//     setAccountGroup([]);
+//   }
+//   setOpen(true);
+// };
+
+
+const openDialog = async (editData = null) => {
+  setOpen(true); // Open early to feel responsive
+  if (editData) {
+    setEditId(editData.accountId);
+    setFormData({
+      account: editData.accountName,
+      amount: editData.amount,
+      description: editData.description || "",
+      notes: editData.note || "",
+      isIncludeInTotal: editData.isIncludeInTotal || false
+    });
+    setSelectedGroupTypeId(editData.accountgroupTypeId || '');
+    
+    const group = await getAccountGroup(editData.accountgroupTypeId);
+    setAccountGroup(group || []);
+    setSlectedAccountGroupId(editData.accountgroupId || '');
+  } else {
+    setEditId(null);
+    setFormData({ account: "", amount: 0.0, description: "", notes: "", isIncludeInTotal: false });
     setSelectedGroupTypeId('');
     setSlectedAccountGroupId('');
     setAccountGroup([]);
   }
-  setOpen(true);
 };
 
   const handleChange = (e) =>{
      setFormData((prev) => ({...prev,[e.target.name]: e.target.value}));
   }
-const handleGroupTypeChange = async (e) => {
+  const handleGroupTypeChange = async (e) => {
   const typeId = e.target.value;
    setSelectedGroupTypeId(typeId);
    setAccountGroup([]);
 if(typeId){
     const group = await getAccountGroup(typeId);
+    //const group = await withLoader(() => getAccountGroup(typeId));
     setAccountGroup(group||[])
 } 
 else{
@@ -127,19 +157,18 @@ else{
    
   }
 
-
-    const fetchAccount = async () => {
+  const fetchAccount = async () => {
       try {
-         showLoading();
+       // showLoading();
+       //  const data = await withLoader(() => getAccount());
         const data = await getAccount();
         setAccount(data || []);
-        hideLoading();
+       // hideLoading();
       } catch (err) {
         console.error(err);
-        Swal.fire("Error", "Failed to load categories.", "error");
+        Swal.fire("Error", "Failed to load account.", "error");
       }
-    };
-
+  };
   const handleSave = async () => {
    const { account, amount, description, notes, isIncludeInTotal } = formData;
  if (!account.trim()) {
@@ -162,6 +191,7 @@ else{
  try {
       await saveAccount(payload);
       handleClose();
+      fetchAccount();
       Swal.fire("Success", "Account saved successfully.", "success");
     } catch (err) {
       console.error(err);
@@ -173,6 +203,7 @@ else{
   const fetchGroupTypes = async () => {
     try {
       const types = await getAccountGroupTypes();
+     // const types = await withLoader(() => getAccountGroupTypes());
       setGroupTypes(types || []);
     } catch (err) {
       console.error('Failed to load group types:', err);
@@ -183,7 +214,7 @@ else{
       <Typography variant='h4' fontWeight={'bold'} gutterBottom>
          Account
       </Typography>
-      <Button variant='contained' sx={{mb:2}} onClick={handleOpen}>
+      <Button variant='contained' sx={{mb:2}} onClick={() =>openDialog()}>
         Add Account
       </Button>
 
@@ -213,7 +244,7 @@ else{
                   <TableCell align="center">
                       <IconButton
                            color="primary"
-                            onClick={() => handleEdit(cat.accountId)}>
+                            onClick={() => openDialog(cat)}>
                        <EditIcon />
                         </IconButton>
 

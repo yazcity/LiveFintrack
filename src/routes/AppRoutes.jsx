@@ -17,7 +17,8 @@ import AccountGroupType from '../pages/AccountGroupType/AccountGroupType';
 import AccountGroup from '../pages/AccountGroup/AccountGroup';
 import TransactionCategories from '../pages/TransactionCategories/TransactionCategories';
 import Account from '../pages/Account/Account';
-
+import Income from '../pages/Transaction/Income/Income';
+import Expense from '../pages/Transaction/Expense/Expense';
 
 
 export default function AppRoutes() {
@@ -45,6 +46,8 @@ export default function AppRoutes() {
               <Route path='transaction-categories' element= {<TransactionCategories/>}/>
               <Route path='account-groups' element= {<AccountGroup/>}/>
               <Route path='account' element= {<Account/>}/>
+              <Route path='income' element= {<Income/>}/>
+              <Route path='expense' element= {<Expense/>}/>
             <Route path="/" element={<Dashboard />} />
           </Route>
         </Routes>

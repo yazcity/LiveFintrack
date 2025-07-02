@@ -20,7 +20,10 @@ export const getAccountById = async (id) => {
 };
 
 export const saveAccount = async (model) => {
+   console.log('yaz start');
   const response = await axiosInstance.post('/Account', model);
+   console.log('yaz end');
+  console.log(response);
   return response.data.message;
 };
 
