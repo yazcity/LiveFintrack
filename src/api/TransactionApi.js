@@ -13,7 +13,8 @@ export const getTransactionId = async (id) => {
 
 
 export const saveTransaction = async (model) => {
-   console.log('yaz start');
+   console.log('yaz start',model);
+
   const response = await axiosInstance.post('/Transaction/add-edit', model);
    console.log('yaz end');
   console.log(response);
