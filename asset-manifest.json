@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/LiveFintrack/static/css/main.64dc0db5.css",
-    "main.js": "/LiveFintrack/static/js/main.e60bf686.js",
+    "main.js": "/LiveFintrack/static/js/main.b14eaa98.js",
     "static/js/453.e2277cc2.chunk.js": "/LiveFintrack/static/js/453.e2277cc2.chunk.js",
     "index.html": "/LiveFintrack/index.html",
     "main.64dc0db5.css.map": "/LiveFintrack/static/css/main.64dc0db5.css.map",
-    "main.e60bf686.js.map": "/LiveFintrack/static/js/main.e60bf686.js.map",
+    "main.b14eaa98.js.map": "/LiveFintrack/static/js/main.b14eaa98.js.map",
     "453.e2277cc2.chunk.js.map": "/LiveFintrack/static/js/453.e2277cc2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.64dc0db5.css",
-    "static/js/main.e60bf686.js"
+    "static/js/main.b14eaa98.js"
   ]
 }
