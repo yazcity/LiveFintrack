@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Swal from "sweetalert2";
 import { Box, Button, useMediaQuery, useTheme } from '@mui/material';
+
+import {saveTransaction, getTransaction, deleteTransaction} from '../../../api/TransactionApi';
 
 import EmployeeFormDialog from './ExpenseDialog';
 import EmployeeFormMobile from './ExpenseFormMobile';
-import EmployeeTableDesktop from './ExpenseTable';
+import ExpenseTableDesktop from './ExpenseTable';
 import EmployeeTableMobile from './ExpenseTableMobile';
 
 
 const initialData = [
   { id: 1, name: 'John Doe', department: 'HR', email: 'john@company.com' },
   { id: 2, name: 'Jane Smith', department: 'IT', email: 'jane@company.com' },
+  { id: 3, name: 'Ahammed Yaseen', department: 'IT', email: 'yazcity@cu.ac.ae' },
 ];
 
 const Expense = () => {
@@ -18,6 +22,27 @@ const Expense = () => {
   const [mode, setMode] = useState('list'); // 'list', 'add', 'edit'
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+
+    useEffect(() => {
+          fetchTransaction();
+
+     }, []);
+
+
+   const [expenseTransaction, setExpenseTransaction] =useState([]);
+
+    const fetchTransaction = async () => {
+        try {
+          const data = await getTransaction(5);
+          setExpenseTransaction(data || []);
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", "Failed to load transaction.", "error");
+        }
+    };
+
+
 
   const handleSave = (emp) => {
     if (emp.id) {
@@ -48,10 +73,10 @@ const Expense = () => {
       {!isMobile && (
         <>
           <Button variant="contained" sx={{ mb: 2 }} onClick={handleAdd}>
-            Add Employee
+            Add Expense
           </Button>
-          <EmployeeTableDesktop
-            data={employees}
+          <ExpenseTableDesktop
+            data={expenseTransaction}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
