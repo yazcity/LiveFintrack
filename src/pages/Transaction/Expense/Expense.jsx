@@ -4,7 +4,7 @@ import { Box, Button, useMediaQuery, useTheme } from '@mui/material';
 
 import {saveTransaction, getTransaction, deleteTransaction} from '../../../api/TransactionApi';
 
-import EmployeeFormDialog from './ExpenseDialog';
+import ExpenseDialog from './ExpenseDialog';
 import EmployeeFormMobile from './ExpenseFormMobile';
 import ExpenseTableDesktop from './ExpenseTable';
 import EmployeeTableMobile from './ExpenseTableMobile';
@@ -44,14 +44,56 @@ const Expense = () => {
 
 
 
-  const handleSave = (emp) => {
-    if (emp.id) {
-      setEmployees(prev => prev.map(e => (e.id === emp.id ? emp : e)));
+  const handleSave = (form) => {
+ console.log('yaseen');
+    console.log(form);
+    if (form.transactionId) {
+      handleSaveSubmit(form)
+      // setEmployees(prev => prev.map(e => (e.id === emp.id ? emp : e)));
     } else {
-      setEmployees(prev => [...prev, { ...emp, id: Date.now() }]);
+      handleSaveSubmit(form)
+      // setEmployees(prev => [...prev, { ...emp, id: Date.now() }]);
     }
     setMode('list');
   };
+
+
+           const handleSaveSubmit = async (form) => {
+           const { transactionId,transactionDate,accountId, categoryId, amount, description, note } = form;
+         if (!amount) {
+              Swal.fire("Warning", "Account name is required.", "warning");
+              return;
+            }
+        
+            const payload = {
+              TransactionId: transactionId || 0,
+              TransactionDate: transactionDate,
+              Amount: parseFloat(amount) || 0.0,
+              Description: description,
+              Note: note,
+              CategoryId: categoryId ? parseInt(categoryId) : 0,
+              AccountId: accountId ? parseInt(accountId) : 0
+            };
+      
+            console.log(payload,'payload dada');
+        
+         try {
+              await saveTransaction(payload);
+              Swal.fire("Success", "Income added successfully.", "success");
+
+                  await fetchTransaction();
+
+                 setMode('list');
+
+       
+            } catch (err) {
+              console.error(err);
+              // handleClose();
+              Swal.fire("Error", "Failed to save Income.", "error");
+            }
+        
+          }
+      
 
   const handleDelete = (id) => {
     setEmployees(prev => prev.filter(e => e.id !== id));
@@ -81,7 +123,7 @@ const Expense = () => {
             onDelete={handleDelete}
           />
           {(mode === 'edit' || mode === 'add') && (
-            <EmployeeFormDialog
+            <ExpenseDialog
               open={true}
               onClose={() => setMode('list')}
               onSave={handleSave}
@@ -98,7 +140,7 @@ const Expense = () => {
             Add Employee
           </Button>
           <EmployeeTableMobile
-            data={employees}
+            data={expenseTransaction}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
