@@ -38,7 +38,8 @@ export default function AppRoutes() {
           <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard1 />} />
+           <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard1" element={<Dashboard1 />} />
               <Route path="/dashboard1" element={<Dashboard2 />} />
               <Route path="/category" element={<CategoryPage/>} />
               <Route path='dialog' element= {<AddCategoryWithDialog/>}/>
