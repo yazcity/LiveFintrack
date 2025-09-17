@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import {
   Box,
   Container,
@@ -16,6 +16,9 @@ import {
   RiExchangeDollarLine,
   RiPieChart2Line,
 } from 'react-icons/ri';
+
+
+import { getDashboard } from '../../api/Dashboard';
 
 const cardData = [
   {
@@ -60,8 +63,55 @@ const cardData = [
   },
 ];
 
+
+const cardDataIncome = [
+  {
+    icon: <RiBankLine size={28} />,
+    count: 42,
+    title: 'Income',
+    percentage: 18.2,
+    status: 'Total income',
+    color: 'primary',
+  },
+
+];
+
+const cardDataExpense = [
+  
+  {
+    icon: <RiMoneyDollarCircleLine size={28} />,
+    count: 8,
+    title: 'Expenses',
+    percentage: -8.7,
+    status: 'Total expenses',
+    color: 'warning',
+  },
+
+  
+  
+];
+
+
 const Dashboard = () => {
   const theme = useTheme();
+
+ const [incomExpense, setIncomExpense] = useState([]);
+
+    const fetchDashboard = async () => {
+      try {
+        const incomExpense = await getDashboard();
+        console.log('yaseen');
+        console.log(incomExpense);
+        setIncomExpense(incomExpense || []);
+      } catch (err) {
+        console.error('Failed to load dashboard:', err);
+      }
+    }
+
+useEffect(() => {
+   fetchDashboard();
+}, []);
+
 
   return (
     <Box sx={{ mt: 3, backgroundColor: '#F5FAFE', py: 8 }}>
@@ -89,7 +139,7 @@ const Dashboard = () => {
             },
           }}
         >
-          {cardData.map((card, index) => {
+          {cardDataIncome.map((card, index) => {
             const positive = card.percentage >= 0;
 
             return (
@@ -135,7 +185,100 @@ const Dashboard = () => {
                   fontWeight="bold"
                   sx={{ lineHeight: 1 }}
                 >
-                  {card.count}
+                  {incomExpense.totalIncome}
+                </Typography>
+
+                {/* Title */}
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={600}
+                  sx={{ textTransform: 'uppercase', letterSpacing: 1.2 }}
+                >
+                  {card.title}
+                </Typography>
+
+                {/* Status & Percentage */}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  mt={1}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ opacity: 0.8 }}
+                  >
+                    {card.status}
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    fontWeight={700}
+                    sx={{
+                      color: positive
+                        ? theme.palette.success.light
+                        : theme.palette.error.light,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 0.5,
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {positive ? '▲' : '▼'} {Math.abs(card.percentage)}%
+                  </Typography>
+                </Stack>
+              </Card>
+            );
+          })}
+
+          {cardDataExpense.map((card, index) => {
+            const positive = card.percentage >= 0;
+
+            return (
+              <Card
+                key={index}
+                elevation={6}
+                sx={{
+                  borderRadius: 3,
+                  color: theme.palette.common.white,
+                  background: theme.palette[card.color].main,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  height: 180,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  padding: 3,
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+                  },
+                }}
+              >
+                {/* Icon in circle */}
+                <Avatar
+                  variant="rounded"
+                  sx={{
+                    bgcolor: theme.palette[card.color].dark,
+                    width: 56,
+                    height: 56,
+                    mb: 1.5,
+                  }}
+                >
+                  {card.icon}
+                </Avatar>
+
+                {/* Big Count Number */}
+                <Typography
+                  variant="h3"
+                  fontWeight="bold"
+                  sx={{ lineHeight: 1 }}
+                >
+                  {incomExpense.totalExpense}
                 </Typography>
 
                 {/* Title */}

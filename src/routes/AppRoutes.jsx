@@ -49,6 +49,8 @@ export default function AppRoutes() {
               <Route path='income' element= {<Income/>}/>
               <Route path='expense' element= {<Expense/>}/>
             <Route path="/" element={<Dashboard />} />
+           <Route path="/LiveFintrack" element={<Dashboard />} />
+            
           </Route>
         </Routes>
       </Box>
